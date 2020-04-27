@@ -1,0 +1,42 @@
+{
+  "name": "express-boilerplate",
+  "version": "1.0.0",
+  "description": "Dead simple boilerplate for express applications",
+  "main": "app.js",
+  "scripts": {
+    "start": "babel-node app.js",
+    "start:dev": "nodemon --exec babel-node app.js",
+    "lint": "eslint --ext .js, --ignore-path .gitignore ."
+  },
+  "keywords": [],
+  "author": "Farhan Hasin Chowdhury <mail@farhan.info>",
+  "license": "MIT",
+  "repository": {
+    "url": "https://github.com/fhsinchy/express-boilerplate.git"
+  },
+  "lint-staged": {
+    "*.{js}": "npm run lint"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.9.2",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/node": "^7.8.7",
+    "@babel/plugin-transform-runtime": "^7.9.0",
+    "@babel/preset-env": "^7.9.5",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.2",
+    "husky": "^4.2.5",
+    "nodemon": "^2.0.3"
+  }
+}
