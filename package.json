@@ -6,21 +6,13 @@
   "scripts": {
     "start": "babel-node app.js",
     "start:dev": "nodemon --exec babel-node app.js",
-    "lint": "eslint --ext .js, --ignore-path .gitignore ."
+    "lint": "eslint --ext .js --cache --fix --ignore-path .gitignore ."
   },
   "keywords": [],
   "author": "Farhan Hasin Chowdhury <mail@farhan.info>",
   "license": "MIT",
   "repository": {
     "url": "https://github.com/fhsinchy/express-boilerplate.git"
-  },
-  "lint-staged": {
-    "*.{js}": "npm run lint"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   },
   "dependencies": {
     "@babel/runtime": "^7.9.2",
@@ -39,5 +31,13 @@
     "husky": "^4.2.5",
     "lint-staged": "^10.1.7",
     "nodemon": "^2.0.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,}": "eslint --cache --fix"
   }
 }
