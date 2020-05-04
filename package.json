@@ -6,7 +6,8 @@
   "scripts": {
     "start": "babel-node app.js",
     "start:dev": "nodemon --exec babel-node app.js",
-    "lint": "eslint --ext .js --cache --fix --ignore-path .gitignore ."
+    "lint": "eslint --ext .js --cache --fix --ignore-path .gitignore .",
+    "test": "cross-env NODE_ENV=test jest --testTimeout=10000"
   },
   "keywords": [],
   "author": "Farhan Hasin Chowdhury <mail@farhan.info>",
@@ -26,12 +27,15 @@
     "@babel/node": "^7.8.7",
     "@babel/plugin-transform-runtime": "^7.9.0",
     "@babel/preset-env": "^7.9.5",
+    "cross-env": "^7.0.2",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-plugin-import": "^2.20.2",
     "husky": "^4.2.5",
+    "jest": "^25.5.4",
     "lint-staged": "^10.1.7",
-    "nodemon": "^2.0.3"
+    "nodemon": "^2.0.3",
+    "supertest": "^4.0.2"
   },
   "husky": {
     "hooks": {

@@ -4,12 +4,12 @@ import cookieParser from 'cookie-parser';
 
 import routes from '../routes';
 
-const server = express();
+const app = express();
 
-server.use(logger('dev'));
-server.use(express.json());
-server.use(cookieParser());
+app.use(logger('dev'));
+app.use(express.json());
+app.use(cookieParser());
 
-server.use('/', routes);
+app.use('/', routes);
 
-export default server;
+export default app;
