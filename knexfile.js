@@ -1,4 +1,6 @@
-// Update with your config settings.
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 module.exports = {
 
@@ -7,7 +9,7 @@ module.exports = {
     connection: {
       filename: './dev.sqlite3',
     },
-    allowNullByDefault: true,
+    useNullAsDefault: true,
   },
 
   test: {
@@ -15,7 +17,7 @@ module.exports = {
     connection: {
       filename: './test.sqlite3',
     },
-    allowNullByDefault: true,
+    useNullAsDefault: true,
   },
 
   staging: {

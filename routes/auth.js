@@ -1,9 +1,8 @@
 const dotenv = require('dotenv');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const array = require('lodash/array');
 const { Router } = require('express');
-
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
 
 const db = require('../db');
 const authMiddleware = require('../middleware/auth');

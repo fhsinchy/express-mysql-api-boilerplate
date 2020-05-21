@@ -6,6 +6,8 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node app.js",
     "dev": "cross-env NODE_ENV=development nodemon app.js",
+    "db:migrate": "knex migrate:latest",
+    "db:refresh": "knex migrate:rollback --all; knex migrate:latest",
     "lint": "eslint --ext .js --cache --fix --ignore-path .gitignore .",
     "test": "cross-env NODE_ENV=test jest --testTimeout=10000"
   },
@@ -13,7 +15,7 @@
   "author": "Farhan Hasin Chowdhury <mail@farhan.info>",
   "license": "MIT",
   "repository": {
-    "url": "https://github.com/fhsinchy/express-boilerplate.git"
+    "url": "https://gitlab.com/fhsinchy/express-boilerplate"
   },
   "dependencies": {
     "bcrypt": "^4.0.1",

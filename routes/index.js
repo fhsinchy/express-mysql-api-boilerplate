@@ -1,5 +1,6 @@
 const { Router } = require('express');
 
+const authRoutes = require('./auth');
 const authMiddleware = require('../middleware/auth');
 
 const router = Router();
@@ -23,5 +24,7 @@ router.get('/profile', authMiddleware, async (req, res) => {
     },
   });
 });
+
+router.use('/auth', authRoutes);
 
 module.exports = router;

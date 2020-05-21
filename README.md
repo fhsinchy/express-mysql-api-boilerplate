@@ -1,6 +1,6 @@
 # Express Boilerplate
 
-> A dead simple boilerplate that advocates good project structure and code manageability and support. This boilerplate supports ES6 and beyond syntax and uses [airbnb](https://github.com/airbnb/javascript) eslint plugin.
+> A dead simple boilerplate that advocates good project structure and code manageability. This boilerplate uses [airbnb](https://github.com/airbnb/javascript) eslint plugin.
 
 ## Project Structure
 
@@ -9,9 +9,20 @@
 ├── LICENSE
 ├── README.md
 ├── app.js
+├── db
+│   └── index.js
+├── dev.sqlite3
+├── knexfile.js
+├── middleware
+│   └── auth.js
+├── migrations
+│   ├── 20200521225756_create_users_table.js
+│   └── 20200521225805_create_tokens_table.js
+├── nodemon.json
 ├── package-lock.json
 ├── package.json
 ├── routes
+│   ├── auth.js
 │   └── index.js
 ├── server
 │   └── index.js
@@ -38,7 +49,6 @@ npm run start # starts production server
 npm run test # runs the tests
 
 npm run lint # lints code
-
 ```
 
 For now the boilerplate contains only the essentials but in future, I may add more functionalities like authentication, database etc.
