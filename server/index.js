@@ -1,8 +1,8 @@
-import express from 'express';
-import logger from 'morgan';
-import cookieParser from 'cookie-parser';
+const express = require('express');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
 
-import routes from '../routes';
+const routes = require('../routes');
 
 const app = express();
 
@@ -12,4 +12,4 @@ app.use(cookieParser());
 
 app.use('/', routes);
 
-export default app;
+module.exports = app;

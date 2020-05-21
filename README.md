@@ -32,7 +32,7 @@ I have used [jestjs](https://jestjs.io/) as test runner and [supertest](https://
 ## Scripts
 
 ```bash
-npm run start:dev # starts development server
+npm run dev # starts development server
 npm run start # starts production server
 
 npm run test # runs the tests
