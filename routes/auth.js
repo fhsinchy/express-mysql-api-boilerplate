@@ -1,7 +1,6 @@
 const dotenv = require('dotenv');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const array = require('lodash/array');
 const { Router } = require('express');
 
 const db = require('../db');
@@ -12,14 +11,14 @@ dotenv.config();
 const router = Router();
 
 router.post('/register', async (req, res) => {
-  if (array.head(await db('users').where({ email: req.body.email }))) {
+  if (await db('users').where({ email: req.body.email }).first()) {
     res.status(400).json({
       status: 'fail',
       message: 'Email Already Taken!',
     });
   } else {
     try {
-      const userId = await db('users').insert({
+      await db('users').insert({
         name: req.body.name,
         email: req.body.email,
         password: await bcrypt.hash(req.body.password, 12),
@@ -30,11 +29,6 @@ router.post('/register', async (req, res) => {
       res.status(201).json({
         status: 'success',
         message: 'User Registered!',
-        data: {
-          user: {
-            id: array.head(userId),
-          },
-        },
       });
     } catch (err) {
       res.status(500).json({
@@ -46,7 +40,7 @@ router.post('/register', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-  const user = array.first(await db('users').where({ email: req.body.email }));
+  const user = await db('users').where({ email: req.body.email }).first();
 
   if (!user) {
     res.status(400).json({
@@ -62,7 +56,7 @@ router.post('/login', async (req, res) => {
     };
 
     const accessToken = jwt.sign(tokenPayload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.NODE_ENV === 'development' ? '1d' : '5m' });
-    let refreshToken = array.first(await db('tokens').where({ user_id: user.id }));
+    let refreshToken = await db('tokens').where({ user_id: user.id }).first();
 
     if (!refreshToken) {
       refreshToken = jwt.sign(tokenPayload, process.env.REFRESH_TOKEN_SECRET);
@@ -104,7 +98,7 @@ router.post('/token/refresh', async (req, res) => {
     });
   }
 
-  const token = array.first(await db('tokens').where({ token: refreshToken }));
+  const token = await db('tokens').where({ token: refreshToken }).first();
 
   if (!token) {
     res.status(403).json({
@@ -140,7 +134,7 @@ router.post('/logout', authMiddleware, async (req, res) => {
     });
   } else {
     try {
-      const token = array.first(await db('tokens').where({ token: refreshToken }));
+      const token = await db('tokens').where({ token: refreshToken }).first();
 
       if (!token) {
         res.status(403).json({
