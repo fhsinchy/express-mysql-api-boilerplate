@@ -15,7 +15,7 @@
   "author": "Farhan Hasin Chowdhury <mail@farhan.info>",
   "license": "MIT",
   "repository": {
-    "url": "https://gitlab.com/fhsinchy/express-boilerplate"
+    "url": "https://github.com/fhsinchy/express-boilerplate"
   },
   "dependencies": {
     "bcrypt": "^4.0.1",
