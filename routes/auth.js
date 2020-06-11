@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const { Router } = require('express');
 const { Bounce } = require('../middleware/bouncer');
 
-const db = require('../db');
+const { User, Token } = require('../models');
 const authMiddleware = require('../middleware/auth');
 
 dotenv.config();
@@ -13,10 +13,10 @@ const router = Router();
 
 router.post('/register', async (req, res, next) => {
   try {
-    if (await db('users').where({ email: req.body.email }).first()) {
+    if (await User.query().where({ email: req.body.email }).first()) {
       throw new Bounce(400, 'Email Already Taken!');
     } else {
-      await db('users').insert({
+      await User.query().insert({
         name: req.body.name,
         email: req.body.email,
         password: await bcrypt.hash(req.body.password, 12),
@@ -36,7 +36,7 @@ router.post('/register', async (req, res, next) => {
 
 router.post('/login', async (req, res, next) => {
   try {
-    const user = await db('users').where({ email: req.body.email }).first();
+    const user = await User.query().where({ email: req.body.email }).first();
 
     if (!user) {
       throw new Bounce(400, 'Wrong Email!');
@@ -48,13 +48,15 @@ router.post('/login', async (req, res, next) => {
         role: user.role,
       };
 
-      const accessToken = jwt.sign(tokenPayload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.NODE_ENV === 'development' ? '1d' : '5m' });
-      let refreshToken = await db('tokens').where({ user_id: user.id }).first();
+      const accessToken = jwt.sign(tokenPayload, process.env.ACCESS_TOKEN_SECRET, {
+        expiresIn: process.env.NODE_ENV === 'development' ? '1d' : '5m',
+      });
+      let refreshToken = await user.$relatedQuery('token');
 
       if (!refreshToken) {
         refreshToken = jwt.sign(tokenPayload, process.env.REFRESH_TOKEN_SECRET);
 
-        await db('tokens').insert({
+        await user.$relatedQuery('token').insert({
           token: refreshToken,
           user_id: user.id,
         });
@@ -89,7 +91,7 @@ router.post('/token/refresh', async (req, res, next) => {
       throw new Bounce(401, 'Unauthorized!');
     }
 
-    const token = await db('tokens').where({ token: refreshToken }).first();
+    const token = await Token.query().where({ token: refreshToken }).first();
 
     if (!token) {
       throw new Bounce(403, 'Forbidden!');
@@ -119,12 +121,12 @@ router.post('/logout', authMiddleware, async (req, res, next) => {
     if (!refreshToken) {
       throw new Bounce(401, 'Unauthorized!');
     } else {
-      const token = await db('tokens').where({ token: refreshToken }).first();
+      const token = await Token.query().where({ token: refreshToken }).first();
 
       if (!token) {
         throw new Bounce(403, 'Forbidden!');
       } else {
-        await db('tokens').where({ token: refreshToken }).del();
+        await Token.query().where({ token: refreshToken }).del();
 
         res.clearCookie('refreshToken');
 

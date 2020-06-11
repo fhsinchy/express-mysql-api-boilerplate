@@ -3,7 +3,6 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 module.exports = {
-
   development: {
     client: 'sqlite3',
     connection: {
@@ -41,5 +40,4 @@ module.exports = {
       database: process.env.DB_DATABASE,
     },
   },
-
 };
