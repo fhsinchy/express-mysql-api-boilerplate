@@ -1,7 +1,5 @@
-const between = require('../helpers/between');
-
 class Bounce extends Error {
-  constructor(status = 500, message) {
+  constructor(status, message) {
     super();
     this.status = status;
     this.message = message;
@@ -10,11 +8,23 @@ class Bounce extends Error {
 
 // eslint-disable-next-line no-unused-vars
 const bouncer = (err, req, res, next) => {
-  const { status, message } = err;
-  res.status(status).json({
-    status: between(status, 400, 500) ? 'fail' : 'error',
-    message,
-  });
+  if (err instanceof Bounce) {
+    const { status, message } = err;
+    res.status(status).json({
+      status: 'fail',
+      message,
+    });
+  } else {
+    // eslint-disable-next-line no-console
+    console.log(err);
+
+    const message = process.env.NODE_ENV === 'production' ? 'Something Went Wrong!' : err.message;
+
+    res.status(500).json({
+      status: 'error',
+      message,
+    });
+  }
 };
 
 module.exports = { Bounce, bouncer };
