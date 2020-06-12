@@ -1,13 +1,56 @@
-const dotenv = require('dotenv');
+/**
+ * Module dependencies.
+ */
 
-const app = require('./server');
+const knex = require('knex');
+const logger = require('morgan');
+const helmet = require('helmet');
+const dotenv = require('dotenv');
+const express = require('express');
+const { Model } = require('objection');
+const cookieParser = require('cookie-parser');
+
+const routes = require('./routes');
+const knexfile = require('./knexfile');
+const { bouncer } = require('./middleware/bouncer');
+
+/**
+ * dotenv initialization.
+ */
 
 dotenv.config();
 
-const host = process.env.HOST || 'http://127.0.0.1';
-const port = process.env.PORT || 3000;
+/**
+ * ORM initialization.
+ */
 
-app.listen(port, () => {
-  // eslint-disable-next-line no-console
-  console.log(`app running -> ${host}:${port}`);
-});
+Model.knex(knex(knexfile[process.env.NODE_ENV]));
+
+/**
+ * app instance initialization.
+ */
+
+const app = express();
+
+/**
+ * Middleware registration.
+ */
+
+app.use(helmet());
+app.use(logger('dev'));
+app.use(express.json());
+app.use(cookieParser());
+
+/**
+ * Route registration.
+ */
+
+app.use('/', routes);
+
+/**
+ * Error handler registration.
+ */
+
+app.use(bouncer);
+
+module.exports = app;

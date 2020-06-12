@@ -4,8 +4,8 @@
   "description": "Dead simple boilerplate for express applications",
   "main": "app.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=production node app.js",
-    "dev": "cross-env NODE_ENV=development nodemon app.js",
+    "start": "cross-env NODE_ENV=production node bin/www",
+    "dev": "cross-env NODE_ENV=development nodemon bin/www",
     "db:migrate": "knex migrate:latest",
     "db:refresh": "knex migrate:rollback --all; knex migrate:latest",
     "lint": "eslint --ext .js --cache --fix --ignore-path .gitignore .",
