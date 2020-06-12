@@ -1,7 +1,7 @@
 const { Router } = require('express');
 
 const authRoutes = require('./auth');
-const authMiddleware = require('../middleware/auth');
+const { authenticate } = require('../middleware');
 
 const router = Router();
 
@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
   });
 });
 
-router.get('/profile', authMiddleware, async (req, res) => {
+router.get('/profile', authenticate, async (req, res) => {
   res.status(200).json({
     status: 'success',
     message: 'User Profile.',

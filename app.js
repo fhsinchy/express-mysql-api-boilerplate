@@ -12,7 +12,7 @@ const cookieParser = require('cookie-parser');
 
 const routes = require('./routes');
 const knexfile = require('./knexfile');
-const { bouncer } = require('./middleware/bouncer');
+const { bouncer } = require('./middleware');
 
 /**
  * dotenv initialization.

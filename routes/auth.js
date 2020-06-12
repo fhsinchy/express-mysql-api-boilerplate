@@ -2,10 +2,9 @@ const dotenv = require('dotenv');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { Router } = require('express');
-const { Bounce } = require('../middleware/bouncer');
 
 const { User, Token } = require('../models');
-const authMiddleware = require('../middleware/auth');
+const { authenticate, Bounce } = require('../middleware');
 
 dotenv.config();
 
@@ -114,7 +113,7 @@ router.post('/token/refresh', async (req, res, next) => {
   }
 });
 
-router.post('/logout', authMiddleware, async (req, res, next) => {
+router.post('/logout', authenticate, async (req, res, next) => {
   try {
     const { refreshToken } = req.cookies;
 
