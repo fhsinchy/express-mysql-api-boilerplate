@@ -3,6 +3,7 @@
  */
 
 const knex = require('knex');
+const cors = require('cors');
 const logger = require('morgan');
 const helmet = require('helmet');
 const dotenv = require('dotenv');
@@ -36,6 +37,7 @@ const app = express();
  * Middleware registration.
  */
 
+app.use(cors());
 app.use(helmet());
 app.use(logger('dev'));
 app.use(express.json());

@@ -4,6 +4,7 @@
   "description": "Dead simple boilerplate for express applications",
   "main": "app.js",
   "scripts": {
+    "knex": "knex",
     "start": "cross-env NODE_ENV=production node bin/www",
     "dev": "cross-env NODE_ENV=development nodemon bin/www",
     "db:migrate": "knex migrate:latest",
@@ -20,6 +21,7 @@
   "dependencies": {
     "bcrypt": "^4.0.1",
     "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "helmet": "^3.22.0",
