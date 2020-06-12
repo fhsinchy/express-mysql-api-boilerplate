@@ -1,34 +1,6 @@
 # Express Boilerplate
 
-> A dead simple boilerplate that advocates good project structure and code manageability. This boilerplate uses [airbnb](https://github.com/airbnb/javascript) eslint plugin.
-
-## Project Structure
-
-```bash
-.
-├── LICENSE
-├── README.md
-├── app.js
-├── db
-│   └── index.js
-├── dev.sqlite3
-├── knexfile.js
-├── middleware
-│   └── auth.js
-├── migrations
-│   ├── 20200521225756_create_users_table.js
-│   └── 20200521225805_create_tokens_table.js
-├── nodemon.json
-├── package-lock.json
-├── package.json
-├── routes
-│   ├── auth.js
-│   └── index.js
-├── server
-│   └── index.js
-└── tests
-    └── routes.test.js
-```
+A dead simple boilerplate that advocates good project structure and code manageability. This boilerplate uses [airbnb](https://github.com/airbnb/javascript) eslint plugin.
 
 ## Instructions
 
