@@ -1,11 +1,11 @@
-const dotenv = require('dotenv');
+// const dotenv = require('dotenv');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const { User, Token } = require('../models');
 const { Bounce } = require('../middleware');
 
-dotenv.config();
+// dotenv.config();
 
 async function register(req, res, next) {
   try {
