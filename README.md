@@ -1,4 +1,4 @@
-# Express Boilerplate
+# Express Boilerplate [![Build Status](https://travis-ci.com/fhsinchy/express-boilerplate.svg?branch=master)](https://travis-ci.com/fhsinchy/express-boilerplate)
 
 A dead simple boilerplate that advocates good project structure and code manageability. This boilerplate uses [airbnb](https://github.com/airbnb/javascript) eslint plugin.
 
