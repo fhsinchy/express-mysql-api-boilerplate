@@ -15,14 +15,9 @@ services:
         ports: 
             - 3000:3000
         environment: 
-            - HOST=http://127.0.0.1
-            - PORT=3000
             - DB_CONNECTION=pg
             - DB_HOST=db
             - DB_PORT=5432
             - DB_USER=postgres
             - DB_DATABASE=express
             - DB_PASSWORD=63eaQB9wtLqmNBpg
-            - COOKIE_SECRET=YgHrfXPWHhPDXkx5eeK7axB9rqOfKCCm
-            - ACCESS_TOKEN_SECRET=BCVk9YTk6v55v1KX3uZgbqNU2BCMDnbV
-            - REFRESH_TOKEN_SECRET=xp9OoUwtRezNuGJDlhrbu7UrbVCNqAdW
