@@ -2,7 +2,7 @@
   "name": "express-boilerplate",
   "version": "1.0.0",
   "description": "Dead simple boilerplate for express applications",
-  "main": "app.js",
+  "main": "bin/www",
   "scripts": {
     "knex": "knex",
     "start": "cross-env NODE_ENV=production node bin/www",
