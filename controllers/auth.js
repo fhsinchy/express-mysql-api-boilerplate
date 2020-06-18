@@ -1,28 +1,30 @@
-// const dotenv = require('dotenv');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const { User, Token } = require('../models');
 const { Bounce } = require('../middleware');
 
-// dotenv.config();
-
 async function register(req, res, next) {
   try {
     if (await User.query().where({ email: req.body.email }).first()) {
       throw new Bounce(400, 'Email Already Taken!');
     } else {
-      await User.query().insert({
+      const user = await User.query().insert({
         name: req.body.name,
         email: req.body.email,
         password: await bcrypt.hash(req.body.password, 12),
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
       });
 
       res.status(201).json({
         status: 'success',
         message: 'User Registered!',
+        data: {
+          user: {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+          },
+        },
       });
     }
   } catch (err) {
@@ -41,7 +43,6 @@ async function login(req, res, next) {
         id: user.id,
         name: user.name,
         email: user.email,
-        role: user.role,
       };
 
       const accessToken = jwt.sign(tokenPayload, process.env.ACCESS_TOKEN_SECRET, {

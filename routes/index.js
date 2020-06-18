@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
   });
 });
 
-router.get('/profile', authenticate, async (req, res) => {
+router.get('/profile', authenticate, (req, res) => {
   res.status(200).json({
     status: 'success',
     message: 'User Profile.',

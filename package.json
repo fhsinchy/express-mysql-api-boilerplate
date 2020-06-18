@@ -10,7 +10,7 @@
     "db:migrate": "knex migrate:latest",
     "db:refresh": "knex migrate:rollback --all; knex migrate:latest",
     "lint": "eslint --ext .js --cache --fix --ignore-path .gitignore .",
-    "test": "cross-env NODE_ENV=test jest --testTimeout=10000"
+    "test": "cross-env NODE_ENV=test jest"
   },
   "keywords": [],
   "author": "Farhan Hasin Chowdhury <mail@farhan.info>",
