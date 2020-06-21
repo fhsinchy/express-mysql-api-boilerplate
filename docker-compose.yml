@@ -15,9 +15,4 @@ services:
         ports: 
             - 3000:3000
         environment: 
-            - DB_CONNECTION=pg
-            - DB_HOST=db
-            - DB_PORT=5432
-            - DB_USER=postgres
-            - DB_DATABASE=express
-            - DB_PASSWORD=63eaQB9wtLqmNBpg
+            env_file: .env
