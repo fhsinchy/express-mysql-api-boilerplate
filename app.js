@@ -11,7 +11,7 @@ const cookieParser = require('cookie-parser');
 
 const knex = require('./db/knex');
 const routes = require('./routes');
-const { bouncer } = require('./middleware');
+const ClientError = require('./classes/ClientError');
 
 /**
  * dotenv initialization.
@@ -48,9 +48,38 @@ app.use(cookieParser());
 app.use('/', routes);
 
 /**
+ * 404 handler.
+ */
+
+app.use((req, res, next) => {
+  const err = new Error('Not Found!');
+  err.status = 404;
+  next(err);
+});
+
+/**
  * Error handler registration.
  */
 
-app.use(bouncer);
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
+  if (err instanceof ClientError) {
+    const { status, message } = err;
+    res.status(status).json({
+      status: 'fail',
+      message,
+    });
+  } else {
+    // eslint-disable-next-line no-console
+    console.log(err);
+
+    const message = process.env.NODE_ENV === 'production' ? 'Something Went Wrong!' : err.message;
+
+    res.status(500).json({
+      status: 'error',
+      message,
+    });
+  }
+});
 
 module.exports = app;

@@ -2,12 +2,12 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const { User, Token } = require('../models');
-const { Bounce } = require('../middleware');
+const ClientError = require('../classes/ClientError');
 
 async function register(req, res, next) {
   try {
     if (await User.query().where({ email: req.body.email }).first()) {
-      throw new Bounce(400, 'Email Already Taken!');
+      throw new ClientError(400, 'Email Already Taken!');
     } else {
       const user = await User.query().insert({
         name: req.body.name,
@@ -37,7 +37,7 @@ async function login(req, res, next) {
     const user = await User.query().where({ email: req.body.email }).first();
 
     if (!user) {
-      throw new Bounce(400, 'Wrong Email!');
+      throw new ClientError(400, 'Wrong Email!');
     } else if (await bcrypt.compare(req.body.password, user.password)) {
       const tokenPayload = {
         id: user.id,
@@ -73,7 +73,7 @@ async function login(req, res, next) {
         accessToken,
       });
     } else {
-      throw new Bounce(400, 'Wrong Password!');
+      throw new ClientError(400, 'Wrong Password!');
     }
   } catch (err) {
     next(err);
@@ -85,17 +85,17 @@ async function refresh(req, res, next) {
     const { refreshToken } = req.cookies;
 
     if (!refreshToken) {
-      throw new Bounce(401, 'Unauthorized!');
+      throw new ClientError(401, 'Unauthorized!');
     }
 
     const token = await Token.query().where({ token: refreshToken }).first();
 
     if (!token) {
-      throw new Bounce(403, 'Forbidden!');
+      throw new ClientError(403, 'Forbidden!');
     } else {
       jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
         if (err) {
-          throw new Bounce(403, err.message);
+          throw new ClientError(403, err.message);
         }
         const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '30m' });
 
@@ -116,12 +116,12 @@ async function logout(req, res, next) {
     const { refreshToken } = req.cookies;
 
     if (!refreshToken) {
-      throw new Bounce(401, 'Unauthorized!');
+      throw new ClientError(401, 'Unauthorized!');
     } else {
       const token = await Token.query().where({ token: refreshToken }).first();
 
       if (!token) {
-        throw new Bounce(403, 'Forbidden!');
+        throw new ClientError(403, 'Forbidden!');
       } else {
         await Token.query().where({ token: refreshToken }).del();
 
