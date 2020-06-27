@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 
 const request = require('supertest');
-const knex = require('../../db/knex');
+const services = require('../../services');
 const app = require('../../app');
 
 function extractCookie(response) {
@@ -13,15 +13,15 @@ function extractCookie(response) {
 }
 
 beforeEach(() => {
-  return knex.migrate.latest();
+  return services.knex.migrate.latest();
 });
 
 afterEach(() => {
-  return knex.migrate.rollback();
+  return services.knex.migrate.rollback();
 });
 
 afterAll(() => {
-  return knex.destroy();
+  return services.knex.destroy();
 });
 
 describe('POST /auth/register', () => {

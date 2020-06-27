@@ -9,7 +9,7 @@ const express = require('express');
 const { Model } = require('objection');
 const cookieParser = require('cookie-parser');
 
-const knex = require('./db/knex');
+const services = require('./services');
 const routes = require('./api');
 const ClientError = require('./classes/ClientError');
 
@@ -17,7 +17,7 @@ const ClientError = require('./classes/ClientError');
  * ORM initialization.
  */
 
-Model.knex(knex);
+Model.knex(services.knex);
 
 /**
  * app instance initialization.
