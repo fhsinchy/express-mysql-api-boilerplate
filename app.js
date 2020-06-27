@@ -10,14 +10,8 @@ const { Model } = require('objection');
 const cookieParser = require('cookie-parser');
 
 const knex = require('./db/knex');
-const routes = require('./routes');
+const routes = require('./api');
 const ClientError = require('./classes/ClientError');
-
-/**
- * dotenv initialization.
- */
-
-// dotenv.config();
 
 /**
  * ORM initialization.
@@ -52,9 +46,7 @@ app.use('/', routes);
  */
 
 app.use((req, res, next) => {
-  const err = new Error('Not Found!');
-  err.status = 404;
-  next(err);
+  next(new ClientError(404, 'Not Found!'));
 });
 
 /**

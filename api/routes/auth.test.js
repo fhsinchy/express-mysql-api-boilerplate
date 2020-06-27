@@ -1,8 +1,8 @@
 /* eslint-disable no-undef */
 
 const request = require('supertest');
-const knex = require('../db/knex');
-const app = require('../app');
+const knex = require('../../db/knex');
+const app = require('../../app');
 
 function extractCookie(response) {
   return response.headers['set-cookie']
