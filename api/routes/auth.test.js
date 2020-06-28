@@ -1,8 +1,9 @@
 /* eslint-disable no-undef */
 
-const { Container } = require('typedi');
 const request = require('supertest');
+
 const app = require('../../app');
+const services = require('../../services');
 
 function extractCookie(response) {
   return response.headers['set-cookie']
@@ -13,15 +14,15 @@ function extractCookie(response) {
 }
 
 beforeEach(() => {
-  return Container.get('knex').migrate.latest();
+  return services.knex.migrate.latest();
 });
 
 afterEach(() => {
-  return Container.get('knex').migrate.rollback();
+  return services.knex.migrate.rollback();
 });
 
 afterAll(() => {
-  return Container.get('knex').destroy();
+  return services.knex.destroy();
 });
 
 describe('POST /auth/register', () => {

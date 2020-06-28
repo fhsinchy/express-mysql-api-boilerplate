@@ -7,18 +7,17 @@ const logger = require('morgan');
 const helmet = require('helmet');
 const express = require('express');
 const { Model } = require('objection');
-const { Container } = require('typedi');
 const cookieParser = require('cookie-parser');
 
-require('./services');
 const routes = require('./api');
+const services = require('./services');
 const ClientError = require('./classes/ClientError');
 
 /**
  * ORM initialization.
  */
 
-Model.knex(Container.get('knex'));
+Model.knex(services.knex);
 
 /**
  * app instance initialization.

@@ -1,3 +1,4 @@
-const { Container } = require('typedi');
+const knex = require('./knex');
+const AuthService = require('./auth');
 
-Container.set('knex', require('./knex'));
+module.exports = { knex, AuthService };
