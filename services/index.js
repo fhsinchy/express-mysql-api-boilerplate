@@ -1,4 +1,5 @@
-const knex = require('./knex');
+const Knex = require('./knex');
 const AuthService = require('./auth');
+const ErrorService = require('./error');
 
-module.exports = { knex, AuthService };
+module.exports = { Knex, AuthService, ErrorService };

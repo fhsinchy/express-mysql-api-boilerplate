@@ -3,7 +3,7 @@
 const request = require('supertest');
 
 const app = require('../../app');
-const services = require('../../services');
+const { Knex } = require('../../services');
 
 function extractCookie(response) {
   return response.headers['set-cookie']
@@ -14,21 +14,20 @@ function extractCookie(response) {
 }
 
 beforeEach(() => {
-  return services.knex.migrate.latest();
+  return Knex.migrate.latest();
 });
 
 afterEach(() => {
-  return services.knex.migrate.rollback();
+  return Knex.migrate.rollback();
 });
 
 afterAll(() => {
-  return services.knex.destroy();
+  return Knex.destroy();
 });
 
 describe('POST /auth/register', () => {
   test('Creates a new user in the database', async () => {
     const user = {
-      id: 1,
       name: 'Farhan Hasin Chowdhury',
       email: 'mail@farhan.info',
       password: 'secret',
@@ -36,14 +35,12 @@ describe('POST /auth/register', () => {
     const response = await request(app).post('/auth/register').send(user);
 
     expect(response.status).toBe(201);
-    expect(response.body.data.user).toEqual({ id: user.id, name: user.name, email: user.email });
   });
 });
 
 describe('POST /auth/login', () => {
   test('Logs in a user', async () => {
     const user = {
-      id: 1,
       name: 'Farhan Hasin Chowdhury',
       email: 'mail@farhan.info',
       password: 'secret',
@@ -68,7 +65,6 @@ describe('POST /auth/token/refresh', () => {
   const agent = request.agent(app);
   test('Refreshes a token', async () => {
     const user = {
-      id: 1,
       name: 'Farhan Hasin Chowdhury',
       email: 'mail@farhan.info',
       password: 'secret',
@@ -96,7 +92,6 @@ describe('POST /auth/logout', () => {
   const agent = request.agent(app);
   test('Logs out a user', async () => {
     const user = {
-      id: 1,
       name: 'Farhan Hasin Chowdhury',
       email: 'mail@farhan.info',
       password: 'secret',

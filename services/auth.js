@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const ClientError = require('../classes/ClientError');
+const ErrorService = require('.');
 
 module.exports = class AuthService {
   constructor(User, Token) {
@@ -11,7 +11,7 @@ module.exports = class AuthService {
 
   async signup(params) {
     if (await this.User.query().where({ email: params.email }).first()) {
-      throw new ClientError(400, 'Email Already Taken!');
+      throw new ErrorService.ClientError(400, 'Email Already Taken!');
     } else {
       const user = await this.User.query().insert({
         name: params.name,
@@ -29,7 +29,7 @@ module.exports = class AuthService {
     const user = await this.User.query().where({ email: params.email }).first();
 
     if (!user) {
-      throw new ClientError(400, 'Wrong Email!');
+      throw new ErrorService.ClientError(400, 'Wrong Email!');
     } else if (await bcrypt.compare(params.password, user.password)) {
       const tokenPayload = {
         id: user.id,
@@ -58,7 +58,7 @@ module.exports = class AuthService {
         refreshToken,
       };
     } else {
-      throw new ClientError(400, 'Wrong Password!');
+      throw new ErrorService.ClientError(400, 'Wrong Password!');
     }
   }
 
@@ -66,18 +66,18 @@ module.exports = class AuthService {
     const { refreshToken } = cookies;
 
     if (!refreshToken) {
-      throw new ClientError(401, 'Unauthorized!');
+      throw new ErrorService.ClientError(401, 'Unauthorized!');
     }
 
     const token = await this.Token.query().where({ token: refreshToken }).first();
 
     if (!token) {
-      throw new ClientError(403, 'Forbidden!');
+      throw new ErrorService.ClientError(403, 'Forbidden!');
     }
 
     return jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
       if (err) {
-        throw new ClientError(403, err.message);
+        throw new ErrorService.ClientError(403, err.message);
       }
       const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '30m' });
 
@@ -89,13 +89,13 @@ module.exports = class AuthService {
     const { refreshToken } = cookies;
 
     if (!refreshToken) {
-      throw new ClientError(401, 'Unauthorized!');
+      throw new ErrorService.ClientError(401, 'Unauthorized!');
     }
 
     const token = await this.Token.query().where({ token: refreshToken }).first();
 
     if (!token) {
-      throw new ClientError(403, 'Forbidden!');
+      throw new ErrorService.ClientError(403, 'Forbidden!');
     }
 
     await this.Token.query().where({ token: refreshToken }).del();

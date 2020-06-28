@@ -1,11 +1,11 @@
 const { Router } = require('express');
 
-const middleware = require('../middleware');
+const { authenticate } = require('../middleware');
 
 const router = Router();
 
 module.exports = (routes) => {
-  routes.use('/profile', middleware.authenticate, router);
+  routes.use('/profile', authenticate, router);
 
   router.get('/', (req, res) => {
     res.status(200).json({

@@ -10,14 +10,13 @@ const { Model } = require('objection');
 const cookieParser = require('cookie-parser');
 
 const routes = require('./api');
-const services = require('./services');
-const ClientError = require('./classes/ClientError');
+const { Knex, ErrorService } = require('./services');
 
 /**
  * ORM initialization.
  */
 
-Model.knex(services.knex);
+Model.knex(Knex);
 
 /**
  * app instance initialization.
@@ -46,7 +45,7 @@ app.use('/', routes);
  */
 
 app.use((req, res, next) => {
-  next(new ClientError(404, 'Not Found!'));
+  next(new ErrorService.ClientError(404, 'Not Found!'));
 });
 
 /**
@@ -55,16 +54,18 @@ app.use((req, res, next) => {
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
-  if (err instanceof ClientError) {
+  if (ErrorService.isClient(err)) {
     const { status, message } = err;
     res.status(status).json({
       status: 'fail',
       message,
     });
+  } else if (ErrorService.isCelebrate(err)) {
+    res.status(400).json({
+      status: 'fail',
+      message: err.message,
+    });
   } else {
-    // eslint-disable-next-line no-console
-    console.log(err);
-
     const message = process.env.NODE_ENV === 'production' ? 'Something Went Wrong!' : err.message;
 
     res.status(500).json({
