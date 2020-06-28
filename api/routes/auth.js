@@ -1,9 +1,9 @@
 const { Router } = require('express');
 const { celebrate, Joi, Segments } = require('celebrate');
 
-const { authenticate } = require('../middleware');
 const { User, Token } = require('../../models');
 const { AuthService } = require('../../services');
+const { authenticate } = require('../middleware');
 
 const router = Router();
 const authService = new AuthService(User, Token);
