@@ -1,3 +1,3 @@
-const knex = require('./knex');
+const { Container } = require('typedi');
 
-module.exports = { knex };
+Container.set('knex', require('./knex'));
