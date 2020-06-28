@@ -1,26 +1,14 @@
-const dotenv = require('dotenv');
 const jwt = require('jsonwebtoken');
-
-dotenv.config();
+const { ErrorService } = require('../../services');
 
 module.exports = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
-  if (!authHeader) {
-    res.status(401).json({
-      status: 'fail',
-      message: 'Unauthorized!',
-    });
-  }
+  if (!authHeader) throw new ErrorService.ClientError(401, 'Unauthorized!');
   const token = authHeader.split(' ')[1];
 
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, user) => {
-    if (err) {
-      res.status(403).json({
-        status: 'fail',
-        message: err.message,
-      });
-    }
+    if (err) throw new ErrorService.ClientError(403, err.message);
     req.user = user;
   });
 
