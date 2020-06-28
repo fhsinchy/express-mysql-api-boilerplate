@@ -5,6 +5,8 @@ const request = require('supertest');
 const app = require('../../app');
 const { Knex } = require('../../services');
 
+require('dotenv').config();
+
 function extractCookie(response) {
   return response.headers['set-cookie']
     .shift()

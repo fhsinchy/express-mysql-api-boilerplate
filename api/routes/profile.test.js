@@ -4,6 +4,8 @@ const request = require('supertest');
 const jwt = require('jsonwebtoken');
 const app = require('../../app');
 
+require('dotenv').config();
+
 describe('GET /profile', () => {
   test('Does not allow unauthorized access', async () => {
     const response = await request(app).get('/profile');
