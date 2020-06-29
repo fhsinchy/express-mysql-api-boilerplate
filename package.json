@@ -1,7 +1,7 @@
 {
-  "name": "express-boilerplate",
+  "name": "node-rocket",
   "version": "1.0.0",
-  "description": "Dead simple boilerplate for express applications",
+  "description": "A solid project template for building node.js APIs",
   "main": "bin/www",
   "scripts": {
     "knex": "knex",
@@ -16,7 +16,7 @@
   "author": "Farhan Hasin Chowdhury <mail@farhan.info>",
   "license": "MIT",
   "repository": {
-    "url": "https://github.com/fhsinchy/express-boilerplate"
+    "url": "https://github.com/fhsinchy/node-rocket"
   },
   "dependencies": {
     "@hapi/joi": "^17.1.1",
