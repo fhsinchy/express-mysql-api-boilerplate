@@ -1,12 +1,11 @@
 const { Router } = require('express');
 const { celebrate, Joi } = require('celebrate');
 
-const { User, Token } = require('../../models');
+const { User } = require('../../models');
 const { AuthService } = require('../../services');
 const { authenticate } = require('../middleware');
 
 const router = Router();
-const authService = new AuthService(User, Token);
 
 module.exports = (routes) => {
   routes.use('/auth', router);
@@ -26,7 +25,7 @@ module.exports = (routes) => {
           status: 'success',
           message: 'User Registered!',
           data: {
-            user: await authService.signup(req.body),
+            user: await new AuthService(User).signup(req.body),
           },
         });
       } catch (err) {
@@ -45,7 +44,7 @@ module.exports = (routes) => {
     }),
     async (req, res, next) => {
       try {
-        const { accessToken, refreshToken } = await authService.login(req.body);
+        const { accessToken, refreshToken } = await new AuthService(User).login(req.body);
 
         res.cookie('refreshToken', refreshToken, {
           httpOnly: true,
@@ -64,32 +63,32 @@ module.exports = (routes) => {
     },
   );
 
-  router.post('/token/refresh', async (req, res, next) => {
+  router.post('/token/refresh', (req, res, next) => {
     try {
-      const accessToken = await authService.refresh(req.cookies);
+      const { refreshToken } = req.cookies;
+
+      if (!refreshToken) {
+        const err = new Error('Unauthorized!');
+        err.status = 401;
+        throw err;
+      }
 
       res.status(200).json({
         status: 'success',
         message: 'Token Generated!',
-        accessToken,
+        accessToken: AuthService.refresh(refreshToken),
       });
     } catch (err) {
       next(err);
     }
   });
 
-  router.post('/logout', authenticate, async (req, res, next) => {
-    try {
-      await authService.logout(req.cookies);
+  router.post('/logout', authenticate, (req, res) => {
+    res.clearCookie('refreshToken');
 
-      res.clearCookie('refreshToken');
-
-      res.status(200).json({
-        status: 'success',
-        message: 'Logged Out!',
-      });
-    } catch (err) {
-      next(err);
-    }
+    res.status(200).json({
+      status: 'success',
+      message: 'Logged Out!',
+    });
   });
 };

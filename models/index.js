@@ -1,4 +1,3 @@
 const User = require('./User');
-const Token = require('./Token');
 
-module.exports = { User, Token };
+module.exports = { User };

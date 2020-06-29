@@ -2,9 +2,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 module.exports = class AuthService {
-  constructor(User, Token) {
+  constructor(User) {
     this.User = User;
-    this.Token = Token;
   }
 
   async signup(params) {
@@ -42,18 +41,8 @@ module.exports = class AuthService {
       const accessToken = jwt.sign(tokenPayload, process.env.ACCESS_TOKEN_SECRET, {
         expiresIn: process.env.NODE_ENV === 'development' ? '1d' : '5m',
       });
-      let refreshToken = await user.$relatedQuery('token');
 
-      if (!refreshToken) {
-        refreshToken = jwt.sign(tokenPayload, process.env.REFRESH_TOKEN_SECRET);
-
-        await user.$relatedQuery('token').insert({
-          token: refreshToken,
-          user_id: user.id,
-        });
-      } else {
-        refreshToken = refreshToken.token;
-      }
+      const refreshToken = jwt.sign(tokenPayload, process.env.REFRESH_TOKEN_SECRET);
 
       return {
         accessToken,
@@ -66,23 +55,7 @@ module.exports = class AuthService {
     }
   }
 
-  async refresh(cookies) {
-    const { refreshToken } = cookies;
-
-    if (!refreshToken) {
-      const err = new Error('Unauthorized!');
-      err.status = 401;
-      throw err;
-    }
-
-    const token = await this.Token.query().where({ token: refreshToken }).first();
-
-    if (!token) {
-      const err = new Error('Forbidden!');
-      err.status = 403;
-      throw err;
-    }
-
+  static refresh(refreshToken) {
     const user = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
 
     const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
@@ -90,25 +63,5 @@ module.exports = class AuthService {
     });
 
     return accessToken;
-  }
-
-  async logout(cookies) {
-    const { refreshToken } = cookies;
-
-    if (!refreshToken) {
-      const err = new Error('Unauthorized!');
-      err.status = 401;
-      throw err;
-    }
-
-    const token = await this.Token.query().where({ token: refreshToken }).first();
-
-    if (!token) {
-      const err = new Error('Forbidden!');
-      err.status = 403;
-      throw err;
-    }
-
-    await this.Token.query().where({ token: refreshToken }).del();
   }
 };
