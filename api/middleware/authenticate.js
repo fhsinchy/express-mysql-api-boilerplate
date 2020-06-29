@@ -1,16 +1,20 @@
 const jwt = require('jsonwebtoken');
-const { ErrorService } = require('../../services');
 
 module.exports = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
-  if (!authHeader) throw new ErrorService.ClientError(401, 'Unauthorized!');
+  if (!authHeader) {
+    const err = new Error('Unauthorized!');
+    err.status = 401;
+    throw err;
+  }
   const token = authHeader.split(' ')[1];
 
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, user) => {
-    if (err) throw new ErrorService.ClientError(403, err.message);
+  try {
+    const user = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
     req.user = user;
-  });
-
-  return next();
+    next();
+  } catch (error) {
+    next(error);
+  }
 };

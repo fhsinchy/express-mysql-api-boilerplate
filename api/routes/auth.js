@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { celebrate, Joi, Segments } = require('celebrate');
+const { celebrate, Joi } = require('celebrate');
 
 const { User, Token } = require('../../models');
 const { AuthService } = require('../../services');
@@ -14,7 +14,7 @@ module.exports = (routes) => {
   router.post(
     '/register',
     celebrate({
-      [Segments.BODY]: Joi.object().keys({
+      body: Joi.object().keys({
         name: Joi.string().trim().required(),
         email: Joi.string().email().trim().required(),
         password: Joi.string().required(),
@@ -38,7 +38,7 @@ module.exports = (routes) => {
   router.post(
     '/login',
     celebrate({
-      [Segments.BODY]: Joi.object().keys({
+      body: Joi.object().keys({
         email: Joi.string().email().trim().required(),
         password: Joi.string().required(),
       }),

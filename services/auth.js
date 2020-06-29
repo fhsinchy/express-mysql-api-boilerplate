@@ -1,8 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const { ErrorService } = require('.');
-
 module.exports = class AuthService {
   constructor(User, Token) {
     this.User = User;
@@ -11,7 +9,9 @@ module.exports = class AuthService {
 
   async signup(params) {
     if (await this.User.query().where({ email: params.email }).first()) {
-      throw new ErrorService.ClientError(400, 'Email Already Taken!');
+      const err = new Error('Email Already Taken!');
+      err.status = 400;
+      throw err;
     } else {
       const user = await this.User.query().insert({
         name: params.name,
@@ -29,7 +29,9 @@ module.exports = class AuthService {
     const user = await this.User.query().where({ email: params.email }).first();
 
     if (!user) {
-      throw new ErrorService.ClientError(400, 'Wrong Email!');
+      const err = new Error('Wrong Email!');
+      err.status = 400;
+      throw err;
     } else if (await bcrypt.compare(params.password, user.password)) {
       const tokenPayload = {
         id: user.id,
@@ -58,7 +60,9 @@ module.exports = class AuthService {
         refreshToken,
       };
     } else {
-      throw new ErrorService.ClientError(400, 'Wrong Password!');
+      const err = new Error('Wrong Password!');
+      err.status = 400;
+      throw err;
     }
   }
 
@@ -66,36 +70,43 @@ module.exports = class AuthService {
     const { refreshToken } = cookies;
 
     if (!refreshToken) {
-      throw new ErrorService.ClientError(401, 'Unauthorized!');
+      const err = new Error('Unauthorized!');
+      err.status = 401;
+      throw err;
     }
 
     const token = await this.Token.query().where({ token: refreshToken }).first();
 
     if (!token) {
-      throw new ErrorService.ClientError(403, 'Forbidden!');
+      const err = new Error('Forbidden!');
+      err.status = 403;
+      throw err;
     }
 
-    return jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-      if (err) {
-        throw new ErrorService.ClientError(403, err.message);
-      }
-      const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '30m' });
+    const user = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
 
-      return accessToken;
+    const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+      expiresIn: process.env.NODE_ENV === 'development' ? '1d' : '5m',
     });
+
+    return accessToken;
   }
 
   async logout(cookies) {
     const { refreshToken } = cookies;
 
     if (!refreshToken) {
-      throw new ErrorService.ClientError(401, 'Unauthorized!');
+      const err = new Error('Unauthorized!');
+      err.status = 401;
+      throw err;
     }
 
     const token = await this.Token.query().where({ token: refreshToken }).first();
 
     if (!token) {
-      throw new ErrorService.ClientError(403, 'Forbidden!');
+      const err = new Error('Forbidden!');
+      err.status = 403;
+      throw err;
     }
 
     await this.Token.query().where({ token: refreshToken }).del();

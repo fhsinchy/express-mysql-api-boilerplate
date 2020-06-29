@@ -7,10 +7,11 @@ const logger = require('morgan');
 const helmet = require('helmet');
 const express = require('express');
 const { Model } = require('objection');
+const { isCelebrate } = require('celebrate');
 const cookieParser = require('cookie-parser');
 
 const routes = require('./api');
-const { Knex, ErrorService } = require('./services');
+const { Knex } = require('./services');
 
 /**
  * ORM initialization.
@@ -45,7 +46,9 @@ app.use('/', routes);
  */
 
 app.use((req, res, next) => {
-  next(new ErrorService.ClientError(404, 'Not Found!'));
+  const err = new Error('Not Found!');
+  err.status = 404;
+  next(err);
 });
 
 /**
@@ -54,25 +57,16 @@ app.use((req, res, next) => {
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
-  if (ErrorService.isClient(err)) {
-    const { status, message } = err;
-    res.status(status).json({
-      status: 'fail',
-      message,
-    });
-  } else if (ErrorService.isCelebrate(err)) {
-    res.status(400).json({
-      status: 'fail',
-      message: err.message,
-    });
-  } else {
-    const message = process.env.NODE_ENV === 'production' ? 'Something Went Wrong!' : err.message;
+  const status = isCelebrate(err) ? 400 : err.status || 500;
+  const message =
+    process.env.NODE_ENV === 'production' && err.status === 500
+      ? 'Something Went Wrong!'
+      : err.message;
 
-    res.status(500).json({
-      status: 'error',
-      message,
-    });
-  }
+  res.status(status).json({
+    status: 'error',
+    message,
+  });
 });
 
 module.exports = app;
