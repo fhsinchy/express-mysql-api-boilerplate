@@ -7,7 +7,9 @@ services:
             POSTGRES_PASSWORD: 63eaQB9wtLqmNBpg
             POSTGRES_DB: express
     api:
-        build: .
+        build:
+            context: .
+            dockerfile: dev-Dockerfile
         command: npm run dev
         volumes: 
             - /usr/app/node_modules
