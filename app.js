@@ -63,6 +63,9 @@ app.use((err, req, res, next) => {
       ? 'Something Went Wrong!'
       : err.message;
 
+  // eslint-disable-next-line no-console
+  if (status === 500) console.log(err.stack);
+
   res.status(status).json({
     status: status >= 500 ? 'error' : 'fail',
     message,
