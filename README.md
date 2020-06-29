@@ -11,6 +11,15 @@ This is a solid project template for building APIs with [Node](https://github.co
 
 This project has by no means the best project architecture, nor does it follows all the best practices. It's something that has worked well for __me__ in the past and still does. Also, I often make changes to the code depending on what new stuff I've learned lately or to suffice my own necessities.
 
+## Development Task List
+
+- [x] Authentication
+- [x] API Validation
+- [x] CI with [Travis CI](https://travis-ci.com/)
+- [x] E2E Tests ([supertest](https://github.com/visionmedia/supertest))
+- [ ] Unit Tests
+- [ ] Documentation
+
 ## Instructions
 
 Entry point for the project is `bin/www`. The main `app` instance is being created inside `app.js` file.
@@ -36,11 +45,13 @@ npm run db:migrate # runs all pending database migrations
 npm run db:refresh # rolls back and re-runs all database migrations
 ```
 
-## Development Task List
+By default the server runs on port `3000` so visiting `http://127.0.0.1:3000` should return something like:
 
-- [x] Authentication
-- [x] API Validation
-- [x] CI with [Travis CI](https://travis-ci.com/)
-- [x] Integration Tests ([supertest](https://github.com/visionmedia/supertest))
-- [ ] Unit Tests
-- [ ] Documentation
+```json
+{
+    "error": false,
+    "message": "Bonjour, mon ami"
+}
+```
+
+Look at the tests inside `tests/e2e` directory to learn about other endpoints.
