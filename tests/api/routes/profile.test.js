@@ -2,7 +2,7 @@
 
 const request = require('supertest');
 const jwt = require('jsonwebtoken');
-const app = require('../../app');
+const app = require('../../../app');
 
 require('dotenv').config();
 

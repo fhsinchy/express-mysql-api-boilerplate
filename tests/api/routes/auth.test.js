@@ -2,8 +2,8 @@
 
 const request = require('supertest');
 
-const app = require('../../app');
-const { Knex } = require('../../services');
+const app = require('../../../app');
+const { Knex } = require('../../../services');
 
 require('dotenv').config();
 
