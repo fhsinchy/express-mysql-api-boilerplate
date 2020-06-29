@@ -9,6 +9,8 @@ This is a solid project template for building APIs with [Node](https://github.co
 - [Celebrate](https://github.com/arb/celebrate) - validation middleware.
 - [Morgan](https://github.com/expressjs/morgan) - logging middleware.
 
+This project has by no means the best project architecture, nor does it follows all the best practices. It's something that has worked well for __me__ in the past and still does. Also, I often make changes to the code depending on what new stuff I've learned lately or to suffice my own necessities.
+
 ## Instructions
 
 Entry point for the project is `bin/www`. The main `app` instance is being created inside `app.js` file.
@@ -34,4 +36,11 @@ npm run db:migrate # runs all pending database migrations
 npm run db:refresh # rolls back and re-runs all database migrations
 ```
 
-This project has by no means the best project architecture, nor does it follows all the best practices. It's something that has worked well for _me_ in the past and still does. Also, I often make changes to the code depending on what I've learned lately or to suffice my own necessity, so suggestions are always welcomed.
+## Development Task List
+
+- [x] Authentication
+- [x] API Validation
+- [x] CI with [Travis CI](https://travis-ci.com/)
+- [x] Integration Tests ([supertest](https://github.com/visionmedia/supertest))
+- [ ] Unit Tests
+- [ ] Documentation
