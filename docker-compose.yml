@@ -9,7 +9,7 @@ services:
     api:
         build:
             context: .
-            dockerfile: dev-Dockerfile
+            dockerfile: Dockerfile.dev
         command: npm run dev
         volumes: 
             - /usr/app/node_modules
