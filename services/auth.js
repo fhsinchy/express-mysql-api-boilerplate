@@ -58,7 +58,13 @@ module.exports = class AuthService {
   static refresh(refreshToken) {
     const user = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
 
-    const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+    const tokenPayload = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    };
+
+    const accessToken = jwt.sign(tokenPayload, process.env.ACCESS_TOKEN_SECRET, {
       expiresIn: process.env.NODE_ENV === 'development' ? '1d' : '5m',
     });
 
