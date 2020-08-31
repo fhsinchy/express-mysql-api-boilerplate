@@ -19,7 +19,7 @@
     "url": "https://github.com/fhsinchy/node-rocket"
   },
   "dependencies": {
-    "@hapi/joi": "^17.1.1",
+    "joi": "^17.1.1",
     "bcrypt": "^5.0.0",
     "celebrate": "^12.1.1",
     "cookie-parser": "^1.4.5",
