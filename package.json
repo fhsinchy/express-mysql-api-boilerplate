@@ -1,5 +1,5 @@
 {
-  "name": "node-rocket",
+  "name": "express-mysql-api-boilerplate",
   "version": "1.0.0",
   "description": "A solid project template for building node.js APIs",
   "main": "bin/www",
@@ -16,10 +16,9 @@
   "author": "Farhan Hasin Chowdhury <mail@farhan.info>",
   "license": "MIT",
   "repository": {
-    "url": "https://github.com/fhsinchy/node-rocket"
+    "url": "https://github.com/fhsinchy/express-mysql-api-boilerplate"
   },
   "dependencies": {
-    "joi": "^17.1.1",
     "bcrypt": "^5.0.0",
     "celebrate": "^12.1.1",
     "cookie-parser": "^1.4.5",
@@ -28,13 +27,13 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "helmet": "^3.22.0",
+    "joi": "^17.1.1",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.21.1",
     "morgan": "^1.10.0",
-    "mysql": "^2.18.1",
+    "mysql2": "^2.2.5",
     "objection": "^2.2.0",
-    "pg": "^8.2.1",
-    "sqlite3": "^4.2.0"
+    "sqlite3": "^5.0.0"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
