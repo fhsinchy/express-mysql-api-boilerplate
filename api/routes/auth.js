@@ -7,6 +7,8 @@ const { authenticate } = require('../middleware');
 
 const router = Router();
 
+const authService = new AuthService(User);
+
 module.exports = (routes) => {
   routes.use('/auth', router);
 
@@ -25,7 +27,7 @@ module.exports = (routes) => {
           status: 'success',
           message: 'User Registered!',
           data: {
-            user: await new AuthService(User).signup(req.body),
+            user: await authService.signup(req.body),
           },
         });
       } catch (err) {
@@ -44,7 +46,7 @@ module.exports = (routes) => {
     }),
     async (req, res, next) => {
       try {
-        const { accessToken, refreshToken } = await new AuthService(User).login(req.body);
+        const { accessToken, refreshToken } = await authService.login(req.body);
 
         res.cookie('refreshToken', refreshToken, {
           httpOnly: true,
